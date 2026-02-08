@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Will You Be My Valentine?</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: "Poppins", sans-serif;
+        background: linear-gradient(135deg, #ff9ec4, #ff6fa8);
+        overflow-x: hidden;
+        text-align: center;
+        color: white;
+    }
+
+    h1 {
+        margin-top: 60px;
+        font-size: 3rem;
+        text-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+        animation: fadeIn 1s ease;
+    }
+
+    .message-box {
+        margin-top: 40px;
+        font-size: 2rem;
+        animation: fadeIn 0.8s ease;
+        min-height: 200px;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: scale(0.9); }
+        to { opacity: 1; transform: scale(1); }
+    }
+
+    button {
+        padding: 15px 35px;
+        font-size: 1.3rem;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: 0.3s ease;
+        margin: 15px;
+    }
+
+    #yes {
+        background-color: #ff3d7a;
+        color: white;
+        position: absolute;
+        transition: 0.2s;
+    }
+
+    #no {
+        background-color: white;
+        color: #ff3d7a;
+        border: 2px solid #ff3d7a;
+    }
+
+    #no:hover {
+        transform: scale(1.1);
+    }
+
+    /* Floating hearts */
+    .heart {
+        position: fixed;
+        bottom: -10px;
+        color: rgba(255,255,255,0.8);
+        font-size: 20px;
+        animation: floatUp 6s linear infinite;
+    }
+
+    @keyframes floatUp {
+        0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+        100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* Single image styling */
+    .single-img {
+        width: 200px;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 15px;
+        margin-top: 20px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        animation: fadeIn 0.8s ease;
+    }
+
+    /* Fireworks */
+    .firework {
+        position: fixed;
+        width: 6px;
+        height: 6px;
+        background: white;
+        border-radius: 50%;
+        animation: explode 1s ease-out forwards;
+    }
+
+    @keyframes explode {
+        0% { transform: scale(1); opacity: 1; }
+        100% { transform: scale(20); opacity: 0; }
+    }
+</style>
+</head>
+
+<body>
+
+<h1 id="main-title">Will You Be My Valentine? 💖</h1>
+
+<div id="message-area" class="message-box"></div>
+
+<div id="buttons">
+    <button id="yes">Yes</button>
+    <button id="no">No</button>
+</div>
+
+<script>
+    const yesBtn = document.getElementById("yes");
+    const noBtn = document.getElementById("no");
+    const messageArea = document.getElementById("message-area");
+
+    /* 🔥 PUT YOUR IMAGE FILENAMES HERE 🔥 */
+    const images = [
+        "me1.jpg",
+        "me2.jpg",
+        "me3.jpg",
+        "me4.jpg"
+    ];
+
+    const messages = [
+        "Are you sure?",
+        "Really sure?",
+        "Think again...",
+        "Don't do this to me...",
+        "My heart is fragile...",
+        "Last chance...",
+        "Okay fine 😢",
+        "Just kidding! One last question ❤️"
+    ];
+
+    let index = 0;
+
+    // YES button dodges
+    yesBtn.addEventListener("mouseover", () => {
+        const x = Math.random() * (window.innerWidth - 150);
+        const y = Math.random() * (window.innerHeight - 150);
+        yesBtn.style.left = x + "px";
+        yesBtn.style.top = y + "px";
+    });
+
+    // NO button shows message + ONE image
+    noBtn.addEventListener("click", () => {
+        if (index < messages.length - 1) {
+            messageArea.innerHTML = messages[index];
+
+            const img = document.createElement("img");
+            img.src = images[index % images.length];
+            img.className = "single-img";
+
+            messageArea.appendChild(img);
+
+            index++;
+        } else {
+            messageArea.innerHTML = "Will you say YES now? ❤️";
+            noBtn.style.display = "none";
+            yesBtn.style.position = "static";
+            yesBtn.style.marginTop = "20px";
+        }
+    });
+
+    // Final YES click → fireworks + hearts
+    yesBtn.addEventListener("click", () => {
+        document.body.innerHTML = `
+            <h1>Thanks for making me happy ❤️</h1>
+        `;
+
+        setInterval(createFirework, 300);
+        setInterval(createHeart, 300);
+    });
+
+    // Floating hearts
+    function createHeart() {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.innerHTML = "❤️";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = (20 + Math.random() * 20) + "px";
+        heart.style.animationDuration = (4 + Math.random() * 4) + "s";
+        document.body.appendChild(heart);
+
+        setTimeout(() => heart.remove(), 6000);
+    }
+
+    setInterval(createHeart, 400);
+
+    // Fireworks
+    function createFirework() {
+        const fw = document.createElement("div");
+        fw.className = "firework";
+        fw.style.left = Math.random() * window.innerWidth + "px";
+        fw.style.top = Math.random() * window.innerHeight + "px";
+        fw.style.background = ["#ff3d7a", "#ffd1dc", "#ffffff", "#ff6fa8"][Math.floor(Math.random()*4)];
+        document.body.appendChild(fw);
+
+        setTimeout(() => fw.remove(), 1000);
+    }
+</script>
+
+</body>
+</html>
